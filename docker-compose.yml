@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/cmd:/app/cmd
+      - ./backend/pkg:/app/pkg
+      - ./backend/internal:/app/internal
+      - ./backend/go.mod:/app/go.mod
+      - ./backend/go.sum:/app/go.sum
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontEnd
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontEnd:/app
+      - /app/node_modules
+    environment:
+      - VITE_HOST=0.0.0.0
+    restart: always
+    depends_on:
+      - backend
