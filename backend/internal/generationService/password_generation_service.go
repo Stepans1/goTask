@@ -73,19 +73,19 @@ func generatePassword(length int, selectedSets []string, availableChars []byte, 
 		used[ch] = true
 	}
 
-	remainingPool := []byte{}
+	remainingChars := []byte{}
 	for _, ch := range availableChars {
 		if !used[ch] {
-			remainingPool = append(remainingPool, ch)
+			remainingChars = append(remainingChars, ch)
 		}
 	}
 
 	remainingLen := length - len(password)
-	for i := 0; i < remainingLen && len(remainingPool) > 0; i++ {
-		idx := rand.Intn(len(remainingPool))
-		ch := remainingPool[idx]
+	for i := 0; i < remainingLen && len(remainingChars) > 0; i++ {
+		idx := rand.Intn(len(remainingChars))
+		ch := remainingChars[idx]
 		password = append(password, ch)
-		remainingPool = slices.Delete(remainingPool, idx, idx+1)
+		remainingChars = slices.Delete(remainingChars, idx, idx+1)
 	}
 
 	rand.Shuffle(len(password), func(i, j int) {
