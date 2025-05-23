@@ -23,7 +23,8 @@ func (c *PasswordGenerationController) Generate(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&data); err != nil {
 		ctx.JSON(http.StatusOK, getResponse(
-			map[string]any{"errors": []string{"Invalid input data (length must be a number, and at least one option must be selected)"}},
+			map[string]any{
+				"errors": []string{"Invalid input data (length must be a number, and at least one option must be selected)"}},
 			false,
 			"Something went wrong.",
 		))

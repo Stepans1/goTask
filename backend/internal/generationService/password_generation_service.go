@@ -63,14 +63,13 @@ func (s *passwordGenerationService) GetGenerationOptions() []DTO.PaternDescripti
 }
 
 func generatePassword(length int, selectedSets []string, availableChars []byte, charSetMap map[string][]byte) string {
-	mandatoryCount := min(len(selectedSets), length)
-	mandatoryChars := []byte{}
+	password := []byte{}
 	used := make(map[byte]bool)
 
-	for i := range mandatoryCount {
-		set := charSetMap[selectedSets[i]]
+	for _, setName := range selectedSets {
+		set := charSetMap[setName]
 		ch := set[rand.Intn(len(set))]
-		mandatoryChars = append(mandatoryChars, ch)
+		password = append(password, ch)
 		used[ch] = true
 	}
 
@@ -81,19 +80,19 @@ func generatePassword(length int, selectedSets []string, availableChars []byte, 
 		}
 	}
 
-	remainingLen := length - len(mandatoryChars)
+	remainingLen := length - len(password)
 	for i := 0; i < remainingLen && len(remainingPool) > 0; i++ {
 		idx := rand.Intn(len(remainingPool))
 		ch := remainingPool[idx]
-		mandatoryChars = append(mandatoryChars, ch)
+		password = append(password, ch)
 		remainingPool = slices.Delete(remainingPool, idx, idx+1)
 	}
 
-	rand.Shuffle(len(mandatoryChars), func(i, j int) {
-		mandatoryChars[i], mandatoryChars[j] = mandatoryChars[j], mandatoryChars[i]
+	rand.Shuffle(len(password), func(i, j int) {
+		password[i], password[j] = password[j], password[i]
 	})
 
-	return string(mandatoryChars)
+	return string(password)
 }
 
 func validateGenerationOptions(length int, options []string) []error {
